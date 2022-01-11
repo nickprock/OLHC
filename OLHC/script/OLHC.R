@@ -1,7 +1,6 @@
 # carico gli script per calcolare la similarità e aggiornare il centroide
-source("script/computeSimilarity.R")
-source("script/cleanCentroid.R")
-source("script/updateCentroid.R")
+source("script/similarity.R")
+source("script/centroid.R")
 source("script/detectBurstee.R")
 OLHC <- function(Tweets, e, delta, h, period, burstyFileOutput, fileOutputTemp){
   ########################################################

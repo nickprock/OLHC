@@ -121,10 +121,30 @@ updateCentroid <- function(centroid, sgn, clus, h, delta, period, fileOutputTemp
     centroid$LocationFreq[[which(centroid$Cluster==clus)]] <- c(centroid$LocationFreq[[which(centroid$Cluster==clus)]], rep(1, length(diffLocation)))
   }
   # poi cancellare
-  pippo <- data.frame(clus = clus, times = sgn$Timestamp, period = centroid$nn[which(centroid$Cluster==clus)], 
-                      user = length(centroid$UserFreq[[which(centroid$Cluster==clus)]]), 
-                      location = length(centroid$LocationFreq[[which(centroid$Cluster==clus)]]), 
-                      tweets = sum(centroid$UserFreq[[which(centroid$Cluster==clus)]]))
-  write.table(x = pippo, file = fileOutputTemp, append = T, sep = ";", col.names=F)
+  tableUp <- data.frame(clus = clus, times = sgn$Timestamp, period = centroid$nn[which(centroid$Cluster==clus)], 
+                        user = length(centroid$UserFreq[[which(centroid$Cluster==clus)]]), 
+                        location = length(centroid$LocationFreq[[which(centroid$Cluster==clus)]]), 
+                        tweets = sum(centroid$UserFreq[[which(centroid$Cluster==clus)]]))
+  write.table(x = tableUp, file = fileOutputTemp, append = T, sep = ";", col.names=F)
   return(centroid)
+}
+
+
+cleanCentroid <- function (Centroid, sgn, delta, h){
+  tct0 <- difftime(time1 = strptime(Centroid$Timestamp, "%Y-%m-%d %H:%M:%S"), 
+                   time2 = strptime(Centroid$Timestamp0, "%Y-%m-%d %H:%M:%S"), 
+                   units = "hour")
+  lf <- delta+((2^h)*tct0)
+  lambda <- 1/as.numeric(lf)
+  tso <- difftime(time1 = strptime(sgn$Timestamp, "%Y-%m-%d %H:%M:%S"), 
+                  time2 = strptime(Centroid$Timestamp, "%Y-%m-%d %H:%M:%S"), 
+                  units = "hour")
+  ftc <- 2^(-lambda*as.numeric(tso))
+  Centroid <- Centroid[ftc >= 0.5,]
+  #   print(paste0("tct0: ",tct0))
+  #   print(paste0("lf: ",lf))
+  #   print(paste0("lamba: ",lambda))
+  #   print(paste0("tso: ",tso))
+  #  print(paste0("ftc: ",ftc))
+  return(Centroid)
 }

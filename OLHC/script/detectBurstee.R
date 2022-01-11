@@ -1,4 +1,8 @@
-source("script/zscore.R")
+z.score <- function(x, mu, sigma){
+  z <- (x - mu)/sigma
+  return(z)
+}
+
 detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn, fileOutput){
     time <- as.numeric(difftime(time1 = strptime(sgn$Timestamp, "%Y-%m-%d %H:%M:%S"), 
                                 time2 = strptime(centroid$Timestamp0[which(centroid$Cluster==clus)], "%Y-%m-%d %H:%M:%S"), 
