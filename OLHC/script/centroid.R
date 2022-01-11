@@ -141,10 +141,5 @@ cleanCentroid <- function (Centroid, sgn, delta, h){
                   units = "hour")
   ftc <- 2^(-lambda*as.numeric(tso))
   Centroid <- Centroid[ftc >= 0.5,]
-  #   print(paste0("tct0: ",tct0))
-  #   print(paste0("lf: ",lf))
-  #   print(paste0("lamba: ",lambda))
-  #   print(paste0("tso: ",tso))
-  #  print(paste0("ftc: ",ftc))
   return(Centroid)
 }
