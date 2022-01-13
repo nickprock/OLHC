@@ -1,7 +1,5 @@
-load("OLHC/data/tweets.rda")
-#Tweets201610 <- flu_201610[,c(1,5,8,11)]
-#names(flu_related_tweets_location) <- c("Timestamp","TweetId","Text","UserName","ScreenName", "Location")
-#Tweets <- flu_related_tweets_location
+#load("OLHC/data/tweets.rda")
+load("OLHC/data/tvSeries.rda")
 # estrazione hashtag e mentions
 library(tm)
 library(stringr)
@@ -115,3 +113,13 @@ for (i in 1:length(tweets$hU)){
   tweets$wB[[i]] <- gsub("[^[:graph:]]", " ", tweets$wB[[i]])
   tweets$wB[[i]] <- tolower(tweets$wB[[i]])
 }
+tweets$Lat.Lon <- paste(tweets$latitude, tweets$longitude, sep = ";")
+tvSeries <- tweets[,c(8,11,5,26,19,20,21,22,24,25)]
+names(tvSeries)[1:3] <- c("TweetId", "UserId", "Timestamp")
+
+screenname <- unique(tvSeries$UserId)
+idx <- 1:length(screenname)
+idx <- paste0("User",idx)
+library(plyr)
+tvSeries$UserId <- mapvalues(tvSeries$UserId, from = screenname, to = idx)
+save(tvSeries, file = "OLHC/data/tvSeries.rda")
