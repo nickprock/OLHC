@@ -1,5 +1,5 @@
 require(sets)
-updateCentroid <- function(centroid, sgn, clus, h, delta, period, fileOutputTemp){
+updateCentroid <- function(centroid, sgn, clus, h, delta, period){
   # aggiornare Timestamp
   centroid$Timestamp[which(centroid$Cluster==clus)] <- sgn$Timestamp
   # prima fare differenza per vedere quanti nuovi termini vanno inseriti
@@ -121,11 +121,7 @@ updateCentroid <- function(centroid, sgn, clus, h, delta, period, fileOutputTemp
     centroid$LocationFreq[[which(centroid$Cluster==clus)]] <- c(centroid$LocationFreq[[which(centroid$Cluster==clus)]], rep(1, length(diffLocation)))
   }
   # poi cancellare
-  tableUp <- data.frame(clus = clus, times = sgn$Timestamp, period = centroid$nn[which(centroid$Cluster==clus)], 
-                        user = length(centroid$UserFreq[[which(centroid$Cluster==clus)]]), 
-                        location = length(centroid$LocationFreq[[which(centroid$Cluster==clus)]]), 
-                        tweets = sum(centroid$UserFreq[[which(centroid$Cluster==clus)]]))
-  write.table(x = tableUp, file = fileOutputTemp, append = T, sep = ";", col.names=F)
+
   return(centroid)
 }
 

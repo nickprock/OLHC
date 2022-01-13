@@ -14,8 +14,10 @@ OLHC <- function(Tweets, e, delta, h, period){
   # inizia la procedura
   ########################################################
   for (i in 1:length(Tweets$TweetId)){
+    print(paste0("start", i))
     sgn <- Tweets[i,]
     if (Centroid$UserId[1] == "" || is.na(Centroid$UserId[1])){
+      print("primo centroide")
       Centroid$UserId[1] <- Tweets$UserId[i]
       Centroid$Timestamp[1] <- Tweets$Timestamp[i]
       Centroid$Timestamp0[1] <- Tweets$Timestamp[i]
@@ -66,6 +68,7 @@ OLHC <- function(Tweets, e, delta, h, period){
       Tweets$Cluster[1] <- 1
     } # inizializzo il primo centroide
     else {
+      print("NON PRIMO")
       Centroid <- cleanCentroid(Centroid, sgn, delta, h)
       sim <- computeSimilarity(Centroid, sgn)
       simmax <- max(sim)
@@ -76,12 +79,12 @@ OLHC <- function(Tweets, e, delta, h, period){
         if (difftime(time1 = strptime(sgn$Timestamp, "%Y-%m-%d %H:%M:%S"), 
                      time2 = strptime(Centroid$Timestamp0[which(Centroid$Cluster==Tweets$Cluster[i])], "%Y-%m-%d %H:%M:%S"), 
                      units = "hour")<=(Centroid$nn[which(Centroid$Cluster==Tweets$Cluster[i])]*((delta+h)/period))){
-          Centroid <- updateCentroid(Centroid, sgn, Tweets$Cluster[i], h, delta, period, fileOutputTemp)
+          Centroid <- updateCentroid(Centroid, sgn, Tweets$Cluster[i], h, delta, period)
           
         } else {
-          Centroid <- detectBurstee(Centroid, sgn, Tweets$Cluster[i], h, delta, period, Centroid$nn[which(Centroid$Cluster==Tweets$Cluster[i])],burstyFileOutput)
+          Centroid <- detectBurstee(Centroid, sgn, Tweets$Cluster[i], h, delta, period, Centroid$nn[which(Centroid$Cluster==Tweets$Cluster[i])])
           Centroid$nn[which(Centroid$Cluster==Tweets$Cluster[i])] <- Centroid$nn[which(Centroid$Cluster==Tweets$Cluster[i])] + 1
-          Centroid <- updateCentroid(Centroid, sgn, Tweets$Cluster[i], h, delta, period, fileOutputTemp)
+          Centroid <- updateCentroid(Centroid, sgn, Tweets$Cluster[i], h, delta, period)
       }
       } else {
         print("CREA NUOVO")
@@ -137,7 +140,6 @@ OLHC <- function(Tweets, e, delta, h, period){
     }
     CentroidHistory <- rbind(na.omit(CentroidHistory), Centroid)
     CentroidHistory <-CentroidHistory[!duplicated(CentroidHistory[,c(1,3,4,17)], fromLast = TRUE),]
-    print(i)
   }
   output <- list(Tweets = Tweets, Centroid = Centroid, CentroidHistory = CentroidHistory)
   return(output)

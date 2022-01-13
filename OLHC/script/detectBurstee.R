@@ -3,7 +3,7 @@ z.score <- function(x, mu, sigma){
   return(z)
 }
 
-detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn, fileOutput){
+detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn){
     time <- as.numeric(difftime(time1 = strptime(sgn$Timestamp, "%Y-%m-%d %H:%M:%S"), 
                                 time2 = strptime(centroid$Timestamp0[which(centroid$Cluster==clus)], "%Y-%m-%d %H:%M:%S"), 
                                 units = "hour"))
@@ -27,13 +27,7 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn, fileOutput)
     SU <- varianzaOLDU + (xiU - mediaOLDU)*(xiU - centroid$MediaUser[which(centroid$Cluster==clus)])
     centroid$VarianzaUser[which(centroid$Cluster==clus)] <- SU
     dev.st_U <- sqrt(SU/n)
-#     if (n-nn>=1){
-#       zUser <- z.score(x = 0, mu = centroid$MediaUser[which(centroid$Cluster==clus)], 
-#                        sigma = dev.st_U)
-#     } else {
-#       zUser <- z.score(x = xiU, mu = centroid$MediaUser[which(centroid$Cluster==clus)], 
-#                        sigma = dev.st_U)
-#     }
+
     zUser <- z.score(x = xiU, mu = centroid$MediaUser[which(centroid$Cluster==clus)], 
                       sigma = dev.st_U)
     if (!is.na(zUser) && zUser>2){
@@ -61,13 +55,7 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn, fileOutput)
     SL <- varianzaOLDL + (xiL - mediaOLDL)*(xiL - centroid$MediaLocation[which(centroid$Cluster==clus)])
     centroid$VarianzaLocation[which(centroid$Cluster==clus)] <- SL
     dev.st_L <- sqrt(SL/n)
-#     if (n-nn>=1){
-#       zLocation <- z.score(x = 0, mu = centroid$MediaLocation[which(centroid$Cluster==clus)], 
-#                            sigma = dev.st_L)
-#     } else {
-#       zLocation <- z.score(x = xiL, mu = centroid$MediaLocation[which(centroid$Cluster==clus)], 
-#                            sigma = dev.st_L)
-#     }
+
      zLocation <- z.score(x = xiL, mu = centroid$MediaLocation[which(centroid$Cluster==clus)], 
                       sigma = dev.st_L)
     if (!is.na(zLocation) && zLocation>2){
@@ -94,13 +82,7 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn, fileOutput)
     ST <- varianzaOLDT + (xiT - mediaOLDT)*(xiT - centroid$MediaTweets[which(centroid$Cluster==clus)])
     centroid$VarianzaTweets[which(centroid$Cluster==clus)] <- ST
     dev.st_T <- sqrt(ST/n)
-#     if (n-nn>=1){
-#       zTweets <- z.score(x = 0, mu = centroid$MediaTweets[which(centroid$Cluster==clus)], 
-#                          sigma = dev.st_T)
-#     } else {
-#       zTweets <- z.score(x = xiT, mu = centroid$MediaTweets[which(centroid$Cluster==clus)], 
-#                          sigma = dev.st_T)
-#     }
+
     zTweets <- z.score(x = xiT, mu = centroid$MediaTweets[which(centroid$Cluster==clus)], 
                          sigma = dev.st_T)
     if (!is.na(zTweets) && zTweets>2){
@@ -134,13 +116,7 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn, fileOutput)
     SE <- varianzaOLDE + (entropia - mediaOLDE)*(entropia - centroid$MediaEntropia[which(centroid$Cluster==clus)])
     centroid$VarianzaEntropia[which(centroid$Cluster==clus)] <- SE
     dev.st_E <- sqrt(SE/n)
-#     if (n-nn>=1){
-#       zEntropia <- z.score(x = 0, mu = centroid$MediaEntropia[which(centroid$Cluster==clus)], 
-#                            sigma = dev.st_E)
-#     } else {
-#       zEntropia <- z.score(x = entropia, mu = centroid$MediaEntropia[which(centroid$Cluster==clus)], 
-#                            sigma = dev.st_E)
-#     }
+
     zEntropia <- z.score(x = entropia, mu = centroid$MediaEntropia[which(centroid$Cluster==clus)], 
                        sigma = dev.st_E)
     if (!is.na(zEntropia) && zEntropia>2){
@@ -153,9 +129,6 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn, fileOutput)
       dat$entropia <- zEntropia
     }
     #dat <- data.frame(cluster = clus, period = n, num.utenti = xiU, num.tweets = xiT, entropia = entropia)
-    if ((!is.na(zEntropia) && zEntropia>2) || (!is.na(zTweets) && zTweets>2) || (!is.na(zLocation) && zLocation>2) || (!is.na(zUser) && zUser>2)){
-      write.table(x = dat, file = fileOutput, append = T, sep = ";")
-    }
     centroid$User[which(centroid$Cluster==clus)] <- list(NULL)
     centroid$UserFreq[which(centroid$Cluster==clus)] <- list(NULL)
     centroid$Location[which(centroid$Cluster==clus)] <- list(NULL)
