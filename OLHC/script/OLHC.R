@@ -10,11 +10,12 @@ OLHC <- function(Tweets, e, delta, h, period){
   Centroid <- data.frame(UserId = character(1), Timestamp = character(1), Lat.Lon = character(1), 
                          stringsAsFactors = FALSE)
   CentroidHistory <- data.frame(stringsAsFactors = FALSE)
+  pb = txtProgressBar(min = 0, max = length(Tweets$TweetId), initial = 0)
   ########################################################
   # START
   ########################################################
   for (i in 1:length(Tweets$TweetId)){
-    print(paste0("start", i))
+    setTxtProgressBar(pb,i)
     sgn <- Tweets[i,]
     if (Centroid$UserId[1] == "" || is.na(Centroid$UserId[1])){
       Centroid$UserId[1] <- Tweets$UserId[i]
@@ -60,7 +61,7 @@ OLHC <- function(Tweets, e, delta, h, period){
       #############################
       # stop detect burstee
       #############################
-      # nn: every centroid a temporal line
+      # nn: every centroid has a temporal line
       Centroid$nn[1] <- 1
       #############################      
       Tweets$Cluster[1] <- 1

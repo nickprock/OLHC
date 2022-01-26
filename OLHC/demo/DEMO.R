@@ -1,14 +1,19 @@
-# caricare il file
+# load data
 load("OLHC/data/demo.rda")
-# caricare la funzione per analizzare i dati di Carmela
+# load function
 source("OLHC/script/OLHC.R")
 # # 
-output<- OLHC(Tweets = Tweets_2, e = 0.1, delta = 1, h = 0.25, period = 5)
+# Tweets: dataset (as demo)
+# e: similarity bound
+# delta: the minimum time period a cluster is maintained even if no new tweet is added
+# h: the temporal horizon a cluster is considered active
+# period: how many period check the life span
+output<- OLHC(Tweets = Tweets_2, e = 0.1, delta = 0.5, h = 1, period = 10)
 
-# per fare le wordcloud
+# wordcloud
 source("OLHC/demo//wordcloudtest.R")
-# idx: id del cluster
-# Tweets: il file in cui cercare
-# minfreq: la frequenza minima che deve avere un termine
-# type: "hashtag", "mention" o "word"
+# idx: cluster id
+# Tweets: the output file returned by OLHC
+# minfreq: minimun term frequency
+# type: "hashtag", "mention" or "word"
 wordcloudtest(idx = 1, Tweets = output, minfreq = 5, type = "mention")
