@@ -8,7 +8,7 @@ source("OLHC/script/OLHC.R")
 # delta: the minimum time period a cluster is maintained even if no new tweet is added
 # h: the temporal horizon a cluster is considered active
 # period: how many period check the life span
-output<- OLHC(Tweets = Tweets_2, e = 0.1, delta = 0.5, h = 1, period = 10)
+output<- OLHC(Tweets = Tweets500, e = 0.1, delta = 0.5, h = 1, period = 10)
 
 # wordcloud
 source("OLHC/demo//wordcloudtest.R")
