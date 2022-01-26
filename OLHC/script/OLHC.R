@@ -17,7 +17,6 @@ OLHC <- function(Tweets, e, delta, h, period){
     print(paste0("start", i))
     sgn <- Tweets[i,]
     if (Centroid$UserId[1] == "" || is.na(Centroid$UserId[1])){
-      print("primo centroide")
       Centroid$UserId[1] <- Tweets$UserId[i]
       Centroid$Timestamp[1] <- Tweets$Timestamp[i]
       Centroid$Timestamp0[1] <- Tweets$Timestamp[i]
@@ -120,7 +119,7 @@ OLHC <- function(Tweets, e, delta, h, period){
         # Tweets
         new_Centroid$MediaTweets <- 0
         new_Centroid$VarianzaTweets <- 0
-        # entropia
+        # entropy
         new_Centroid$MediaEntropia <- 0
         new_Centroid$VarianzaEntropia <- 0
         #############################
