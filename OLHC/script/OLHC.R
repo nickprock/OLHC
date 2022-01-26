@@ -1,17 +1,17 @@
-# carico gli script per calcolare la similarità e aggiornare il centroide
+# load functions
 source("OLHC//script/similarity.R")
 source("OLHC//script/centroid.R")
 source("OLHC//script/detectBurstee.R")
 OLHC <- function(Tweets, e, delta, h, period){
   ########################################################
-  # creazione colonna cluster e data.frame dei centroidi
+  # creation centroid
   ########################################################
   Tweets$Cluster <- 0
   Centroid <- data.frame(UserId = character(1), Timestamp = character(1), Lat.Lon = character(1), 
                          stringsAsFactors = FALSE)
   CentroidHistory <- data.frame(stringsAsFactors = FALSE)
   ########################################################
-  # inizia la procedura
+  # START
   ########################################################
   for (i in 1:length(Tweets$TweetId)){
     print(paste0("start", i))
@@ -36,7 +36,7 @@ OLHC <- function(Tweets, e, delta, h, period){
       Centroid$wBFreq[[1]] <- rep(1, length(Centroid$wB[[1]]))
       Centroid$Cluster[1] <- 1
       #############################
-      # codice burstee
+      # start detect burstee
       #############################
       # User
       Centroid$User[1] <- list(NULL)
@@ -59,21 +59,18 @@ OLHC <- function(Tweets, e, delta, h, period){
       Centroid$MediaEntropia <- 0
       Centroid$VarianzaEntropia <- 0
       #############################
-      # fine codice burstee
+      # stop detect burstee
       #############################
-      # nn dovrebbe far scorrere il tempo
-      # ogni centroide ha una sua linea temporale
+      # nn: every centroid a temporal line
       Centroid$nn[1] <- 1
       #############################      
       Tweets$Cluster[1] <- 1
-    } # inizializzo il primo centroide
+    }
     else {
-      print("NON PRIMO")
       Centroid <- cleanCentroid(Centroid, sgn, delta, h)
       sim <- computeSimilarity(Centroid, sgn)
       simmax <- max(sim)
       if (simmax >= e){
-        print("AGGIORNA")
         Tweets$Cluster[i] <- min(Centroid$Cluster[which(sim == simmax)])
         
         if (difftime(time1 = strptime(sgn$Timestamp, "%Y-%m-%d %H:%M:%S"), 
@@ -87,7 +84,6 @@ OLHC <- function(Tweets, e, delta, h, period){
           Centroid <- updateCentroid(Centroid, sgn, Tweets$Cluster[i], h, delta, period)
       }
       } else {
-        print("CREA NUOVO")
         new_Centroid <- data.frame(UserId = Tweets$UserId[i], Timestamp = Tweets$Timestamp[i],
                                    Timestamp0 = Tweets$Timestamp[i],
                                    Lat.Lon = Tweets$Lat.Lon[i], stringsAsFactors = FALSE)
@@ -105,7 +101,7 @@ OLHC <- function(Tweets, e, delta, h, period){
         new_Centroid$wBFreq[[1]] <- rep(1, length(new_Centroid$wB[[1]]))
         new_Centroid$Cluster[1] <- max(Tweets$Cluster) + 1
         #############################
-        # codice burstee
+        # start detect burstee
         #############################
         # User
         new_Centroid$User[1] <- list(NULL)
@@ -128,12 +124,11 @@ OLHC <- function(Tweets, e, delta, h, period){
         new_Centroid$MediaEntropia <- 0
         new_Centroid$VarianzaEntropia <- 0
         #############################
-        # fine codice burstee
+        # stop detect burstee
         #############################
         new_Centroid$nn <- 1
-        # inserisci il nuovo centroide nel data.frame
         Centroid <- rbind(Centroid, new_Centroid)
-        # etichetta il tweet
+        # label
         Tweets$Cluster[i] <- max(Tweets$Cluster) + 1
       }
       
