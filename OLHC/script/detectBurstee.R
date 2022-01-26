@@ -9,13 +9,9 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn){
                                 units = "hour"))
     n <- (time%/%((delta+h)/period))
     dat <- data.frame(clus = numeric(1), times = character(1), period = numeric(1), user = numeric(1), location = numeric(1), tweets = numeric(1), entropia = numeric(1))
-    # utente
     mediaOLDU <- centroid$MediaUser[which(centroid$Cluster==clus)]
-    #print(paste("mediaOLD_U", clus, "al tempo", sgn$Timestamp, "è pari:", mediaOLDU, sep = " "))
     varianzaOLDU <- centroid$VarianzaUser[which(centroid$Cluster==clus)]
-    #print(paste("S_OLD_U", clus, "al tempo", sgn$Timestamp, "è pari:", varianzaOLDU, sep = " "))
     xiU <- length(centroid$UserFreq[[which(centroid$Cluster==clus)]])
-    #print(paste("xiU", clus, "al tempo", sgn$Timestamp, "è pari:", xiU, sep = " "))
     centroid$MediaUser[which(centroid$Cluster==clus)] <- mediaOLDU+((xiU-mediaOLDU)/n)
     if (n-nn>=1){
       xiU <- 0
@@ -44,7 +40,6 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn){
     varianzaOLDL <- centroid$VarianzaLocation[which(centroid$Cluster==clus)]
     xiL <- length(centroid$LocationFreq[[which(centroid$Cluster==clus)]])
     centroid$MediaLocation[which(centroid$Cluster==clus)] <- mediaOLDL+((xiL - mediaOLDL)/n)
-#    diffL <- xiL - centroid$MediaLocation[which(centroid$Cluster==clus)]
     if (n-nn>=1){
       xiL <- 0
       varianzaOLDL <- 1
@@ -94,10 +89,9 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn){
       dat$period <- n
       dat$tweets <- zTweets
     }
-    # entropia
+    # entropy
     mediaOLDE <- centroid$MediaEntropia[which(centroid$Cluster==clus)]
     varianzaOLDE <- centroid$VarianzaEntropia[which(centroid$Cluster==clus)]
-    # calcolo entropia
     pilogpi <- c()
     for (i in 1:length(centroid$UserFreq[[which(centroid$Cluster==clus)]])){
       pi <- centroid$UserFreq[[which(centroid$Cluster==clus)]][i]/xiT
@@ -128,7 +122,6 @@ detectBurstee <- function(centroid, sgn, clus, h, delta, period, nn){
       dat$period <- n
       dat$entropia <- zEntropia
     }
-    #dat <- data.frame(cluster = clus, period = n, num.utenti = xiU, num.tweets = xiT, entropia = entropia)
     centroid$User[which(centroid$Cluster==clus)] <- list(NULL)
     centroid$UserFreq[which(centroid$Cluster==clus)] <- list(NULL)
     centroid$Location[which(centroid$Cluster==clus)] <- list(NULL)
