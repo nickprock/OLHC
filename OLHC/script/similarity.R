@@ -45,7 +45,6 @@ computeSimilarity <- function(centroid, sgn){
     } else {
       sim[[i]][6] <- NA
     }
-    # f <- e^(-(sgn$Timestamp - centroid$Timestamp)^2)
     similarity[i] <- mean(sim[[i]], na.rm = TRUE)
   }
   return (similarity)
