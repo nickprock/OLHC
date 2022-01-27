@@ -1,5 +1,7 @@
 # OLHC
 
+![cover](https://www.researchgate.net/profile/Brian-Spitzberg/publication/318250631/figure/fig1/AS:525748087816192@1502359520568/A-comparison-of-word-cloud-images-indicating-the-most-popular-word-used-in-the-tweet.png)
+
 The algorithm in this repo is inspired about the paper ***"How people talk about health? Detecting Health Topics from Twitter Streams"***.
 The authors propose an online and incremental method for clustering streams of tweets with the aim of detecting interesting topics in Healthcare.
 
