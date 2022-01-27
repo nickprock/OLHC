@@ -5,6 +5,8 @@ The authors propose an online and incremental method for clustering streams of t
 
 The [full paper is avaible on researchgate](https://www.researchgate.net/profile/Carmela-Comito/publication/320911146_How_people_talk_about_health_Detecting_Health_Topics_from_Twitter_Streams/links/5a01f49a4585155c96ca91be/How-people-talk-about-health-Detecting-Health-Topics-from-Twitter-Streams.pdf)
 
+> [The cover image is by Brian Spitzberg](https://www.researchgate.net/figure/A-comparison-of-word-cloud-images-indicating-the-most-popular-word-used-in-the-tweet_fig1_318250631)
+
 ## Citation
 
 If you use my code in your research, please cite the papers:
